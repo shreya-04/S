@@ -1,0 +1,176 @@
+Name: Shreya Pednekar
+Dbda039
+Assignment 2
+1)To study datatypes;
+mysql> create table TextDataTypes
+    -> (A char(10),
+    -> B varchar(10),
+    -> C text);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into TextDataTypes values('123','123','Text Data-Larger strings are accepted here');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into TextDataTypes values('12','12','Text Data-Larger strings are accepted here');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from TextDataTypes;
++------+------+--------------------------------------------+
+| A    | B    | C                                          |
++------+------+--------------------------------------------+
+| 123  | 123  | Text Data-Larger strings are accepted here |
+| 12   | 12   | Text Data-Larger strings are accepted here |
++------+------+--------------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select length(A),length(B) from TextDataTypes;
++-----------+-----------+
+| length(A) | length(B) |
++-----------+-----------+
+|         3 |         3 |
+|         2 |         2 |
++-----------+-----------+
+2 rows in set (0.00 sec)
+2)To study numerical datatypes
+mysql> create table NumDatatypes(
+    -> A tinyint,
+    -> B smallint,
+    -> C mediumint,
+    -> D int,
+    -> E bigint,
+    -> F decimal,
+    -> G double(8,2),
+    -> H float
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe NumDatatypes;
++-------+---------------+------+-----+---------+-------+
+| Field | Type          | Null | Key | Default | Extra |
++-------+---------------+------+-----+---------+-------+
+| A     | tinyint(4)    | YES  |     | NULL    |       |
+| B     | smallint(6)   | YES  |     | NULL    |       |
+| C     | mediumint(9)  | YES  |     | NULL    |       |
+| D     | int(11)       | YES  |     | NULL    |       |
+| E     | bigint(20)    | YES  |     | NULL    |       |
+| F     | decimal(10,0) | YES  |     | NULL    |       |
+| G     | double(8,2)   | YES  |     | NULL    |       |
+| H     | float         | YES  |     | NULL    |       |
++-------+---------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+ Note:If values not put appropriately it will throw error as follows:
+
+mysql> insert into NumDatatypes values(110,234,3345,333345,3333345,99999999.9,99999999.99,99999999.99);
+ERROR 1264 (22003): Out of range value for column 'G' at row 1
+mysql>
+
+final query:
+mysql> insert into NumDatatypes values(110,234,3345,333345,3333345,999999.9,999999.99,999999.99);
+Query OK, 1 row affected, 1 warning (0.04 sec)
+mysql> select * from NumDatatypes;
++------+------+------+--------+---------+---------+-----------+---------+
+| A    | B    | C    | D      | E       | F       | G         | H       |
++------+------+------+--------+---------+---------+-----------+---------+
+|  110 |  234 | 3345 | 333345 | 3333345 | 1000000 | 999999.99 | 1000000 |
++------+------+------+--------+---------+---------+-----------+---------+
+1 row in set (0.00 sec)
+3)To study date as datatype;
+mysql> create table DateDatatypes(
+    -> A date,
+    -> B datetime,
+    -> C timestamp,
+    -> D time);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> describe DateDatatypes;
++-------+-----------+------+-----+-------------------+-----------------------------+
+| Field | Type      | Null | Key | Default           | Extra                       |
++-------+-----------+------+-----+-------------------+-----------------------------+
+| A     | date      | YES  |     | NULL              |                             |
+| B     | datetime  | YES  |     | NULL              |                             |
+| C     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| D     | time      | YES  |     | NULL              |                             |
++-------+-----------+------+-----+-------------------+-----------------------------+
+4 rows in set (0.01 sec)
+mysql> insert into DateDatatypes values(current_date(),now(),now(),now());
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from DateDatatypes;
++------------+---------------------+---------------------+----------+
+| A          | B                   | C                   | D        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 10:30:23 | 2019-08-26 10:30:23 | 10:30:23 |
+| 2019-08-26 | 2019-08-26 19:41:32 | 2019-08-26 19:41:32 | 19:41:32 |
++------------+---------------------+---------------------+----------+
+2 rows in set (0.00 sec)
+
+4)Working with special databases;
+mysql> create table SplDatatypes(ID int AUTO_INCREMENT primary key,
+    -> Membership enum('silver','gold','platinum'),
+    -> Hobbies set('swimming','Sking','Cricket','football'));
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> describe SplDatatypes;
++------------+----------------------------------------------+------+-----+---------+----------------+
+| Field      | Type                                         | Null | Key | Default | Extra          |
++------------+----------------------------------------------+------+-----+---------+----------------+
+| ID         | int(11)                                      | NO   | PRI | NULL    | auto_increment |
+| Membership | enum('silver','gold','platinum')             | YES  |     | NULL    |                |
+| Hobbies    | set('swimming','Sking','Cricket','football') | YES  |     | NULL    |                |
++------------+----------------------------------------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> insert into SplDatatypes (Membership,Hobbies) values('silver','Sking,football');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from SplDatatypes;
++----+------------+----------------+
+| ID | Membership | Hobbies        |
++----+------------+----------------+
+|  1 | silver     | Sking,football |
++----+------------+----------------+
+1 row in set (0.00 sec)
+
+-------sorting data--------
+By ascending
+
+mysql> select * from ProductCategory order by Name ASC;
++-------------------+-------------+-------+
+| ProductCategoryID | name        | state |
++-------------------+-------------+-------+
+|                 3 | Accessories | NULL  |
+|                 2 | Makeup      | NULL  |
+|                 1 | Oil         | NULL  |
+|                 4 | Table       | NULL  |
++-------------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+
+****sorting by descending********
+mysql> select * from ProductCategory order by Name desc;
++-------------------+-------------+-------+
+| ProductCategoryID | name        | state |
++-------------------+-------------+-------+
+|                 4 | Table       | NULL  |
+|                 1 | Oil         | NULL  |
+|                 2 | Makeup      | NULL  |
+|                 3 | Accessories | NULL  |
++-------------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+***sorting data just by name******
+mysql> select * from ProductCategory order by name;
++-------------------+-------------+-------+
+| ProductCategoryID | name        | state |
++-------------------+-------------+-------+
+|                 3 | Accessories | NULL  |
+|                 2 | Makeup      | NULL  |
+|                 1 | Oil         | NULL  |
+|                 4 | Table       | NULL  |
++-------------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+mysql>
+
+
+

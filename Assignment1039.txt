@@ -1,0 +1,110 @@
+NAME:Shreya Pednekar
+DBDA
+Roll No:039
+Assignment-1 Date:25/08/2019
+1)Command to show databases--
+show databases;
+2)Create database--
+create database database_name;
+3)use database_name;
+4)Make your table
+mysql> use Shreya039;
+Database changed
+mysql> describe ProductCategory;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| ProductCategoryID | int(11)     | YES  |     | NULL    |       |
+| Name              | varchar(20) | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+2 rows in set (0.02 sec)
+5)insert values into the table;
+mysql> select * from ProductCategory;
++-------------------+------------+
+| ProductCategoryID | Name       |
++-------------------+------------+
+|                 1 | Bikes      |
+|                 2 | Motorbikes |
+|                 3 | Cars       |
+|                 4 | sportsbike |
+|                 5 | cycle      |
++-------------------+------------+
+6 rows in set (0.00 sec)
+7)If you want to update the data
+mysql> update ProductCategory set name='car' where ProductCategoryID=3;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from ProductCategory;
++-------------------+------------+
+| ProductCategoryID | Name       |
++-------------------+------------+
+|                 1 | Bikes      |
+|                 1 | Bikes      |
+|                 2 | Motorbikes |
+|                 3 | car        |
+|                 4 | sportsbike |
+|                 5 | cycle      |
++-------------------+------------+
+6 rows in set (0.00 sec)
+8)If you want to delete the row
+mysql> delete from ProductCategory where Name='Bikes';
+Query OK, 2 rows affected (0.06 sec)
+
+mysql> select * from ProductCategory;
++-------------------+------------+
+| ProductCategoryID | Name       |
++-------------------+------------+
+|                 2 | Motorbikes |
+|                 3 | car        |
+|                 4 | sportsbike |
+|                 5 | cycle      |
++-------------------+------------+
+4 rows in set (0.00 sec)
+
+9)If you want to remove the table;
+mysql> Drop table ProductCategory;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from ProductCategory;
+ERROR 1146 (42S02): Table 'shreya039.productcategory' doesn't exist
+
+10)Now by assigning Primary key
+mysql> create table ProductCategory
+    -> (ProductCategoryID int primary key,
+    -> name varchar(20));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe ProductCategory;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| ProductCategoryID | int(11)     | NO   | PRI | NULL    |       |
+| name              | varchar(20) | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+11)Assigning Primary key
+we cannot duplicate values if given primary key
+eg;
+mysql> insert into ProductCategory values(2,'Makeup');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into ProductCategory values(2,'Accessories');
+ERROR 1062 (23000): Duplicate entry '2' for key 'PRIMARY'
+mysql>
+
+12) If you want to add the column i.e. attribute
+mysql> alter table ProductCategory add state varchar(20) after name;
+Query OK, 4 rows affected (0.20 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> describe ProductCategory;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| ProductCategoryID | int(11)     | NO   | PRI | NULL    |       |
+| name              | varchar(20) | YES  |     | NULL    |       |
+| state             | varchar(20) | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
