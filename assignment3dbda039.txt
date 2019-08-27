@@ -1,0 +1,380 @@
+mysql> create table Member(memberID int auto_increment primary key,
+    -> fname varchar(20) not null,
+    -> mname varchar(10),
+    -> lname varchar(20) not null,
+    -> mem_DOJ date,
+    -> email varchar(30),
+    -> phone char(10),
+    -> mem_type enum('regular','silver','golden'));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>
+mysql>
+mysql> describe member;
++----------+-----------------------------------+------+-----+---------+----------------+
+| Field    | Type                              | Null | Key | Default | Extra          |
++----------+-----------------------------------+------+-----+---------+----------------+
+| memberID | int(11)                           | NO   | PRI | NULL    | auto_increment |
+| fname    | varchar(20)                       | NO   |     | NULL    |                |
+| mname    | varchar(10)                       | YES  |     | NULL    |                |
+| lname    | varchar(20)                       | NO   |     | NULL    |                |
+| mem_DOJ  | date                              | YES  |     | NULL    |                |
+| email    | varchar(30)                       | YES  |     | NULL    |                |
+| phone    | char(10)                          | YES  |     | NULL    |                |
+| mem_type | enum('regular','silver','golden') | YES  |     | NULL    |                |
++----------+-----------------------------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+mysql> create table Book
+    -> (
+    -> BookID int Auto_increment primary key,
+    -> BookName varchar(50) not null,
+    -> Price decimal(6,2));
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> describe Book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+
+mysql> Alter table Book add column Author char(30) not null;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe Book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | char(30)     | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+
+mysql> Alter table Book MODIFY column Author varchar(30) not null;
+Query OK, 0 rows affected (0.17 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe Book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | varchar(30)  | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> Alter table Book drop Column Author;
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe Book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+m
+mysql> Alter table member ADD constraint mem_Email_uq unique (email);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TrnID auto_increment primary key,
+    -> TrnDate datetime Default Now(),
+    -> BookID int references Book(BookID),
+    -> memberID int references member(memberID)
+    -> );
+
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TrnID int auto_increment primary key,
+    -> TrnDate datetime Default Now(),
+    -> BookID int references Book(BookID),
+    -> );
+
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TrnID auto_increment primary key,
+    -> TrnDate datetime,
+    -> BookID int references Book(BookID),
+    -> );
+
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TrnID int auto_increment primary key,
+    -> TrnDate datetime,
+    -> BookID int references Book(BookID),
+    -> memberID int references member(memberID)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> describe BookTran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TrnID    | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TrnDate  | datetime | YES  |     | NULL    |                |
+| BookID   | int(11)  | YES  |     | NULL    |                |
+| memberID | int(11)  | YES  |     | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from BookTran;
+Empty set (0.00 sec)
+
+mysql> insert into Member values(1,'Pranali',Null,'Pawar',now(),'Pranali@gmail.com','9769188952','regular');
+Query OK, 1 row affected, 1 warning (0.03 sec)
+
+
+mysql> insert into Member values(2,'Pranali','abc','Pawar','2019-08-27',null,'9769188982','regular');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Member(memberID) values('Pranali','abc','Pawar','2019-08-27',null,'9769188982','regular');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> describe member;
++----------+-----------------------------------+------+-----+---------+----------------+
+| Field    | Type                              | Null | Key | Default | Extra          |
++----------+-----------------------------------+------+-----+---------+----------------+
+| memberID | int(11)                           | NO   | PRI | NULL    | auto_increment |
+| fname    | varchar(20)                       | NO   |     | NULL    |                |
+| mname    | varchar(10)                       | YES  |     | NULL    |                |
+| lname    | varchar(20)                       | NO   |     | NULL    |                |
+| mem_DOJ  | date                              | YES  |     | NULL    |                |
+| email    | varchar(30)                       | YES  | UNI | NULL    |                |
+| phone    | char(10)                          | YES  |     | NULL    |                |
+| mem_type | enum('regular','silver','golden') | YES  |     | NULL    |                |
++----------+-----------------------------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+mysql> insert into Member(fname,mname,lname,mem_DOJ,email,phone,mem_type) values('Pranali','abc','Pawar','2019-08-27',null,'9769188982','regular');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Member(fname,mname,lname,mem_DOJ,email,phone,mem_type) values('shreya',null,'Dsouza','2019-08-28',null,'9769187982','silver');
+Query OK, 1 row affected (0.06 sec)
+
+
+mysql> select * from Member;
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+| memberID | fname   | mname | lname  | mem_DOJ    | email             | phone      | mem_type |
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+|        1 | Pranali | NULL  | Pawar  | 2019-08-27 | Pranali@gmail.com | 9769188952 | regular  |
+|        2 | Pranali | abc   | Pawar  | 2019-08-27 | NULL              | 9769188982 | regular  |
+|        3 | Pranali | abc   | Pawar  | 2019-08-27 | NULL              | 9769188982 | regular  |
+|        4 | shreya  | NULL  | Dsouza | 2019-08-28 | NULL              | 9769187982 | silver   |
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> describe book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> describe member;
++----------+-----------------------------------+------+-----+---------+----------------+
+| Field    | Type                              | Null | Key | Default | Extra          |
++----------+-----------------------------------+------+-----+---------+----------------+
+| memberID | int(11)                           | NO   | PRI | NULL    | auto_increment |
+| fname    | varchar(20)                       | NO   |     | NULL    |                |
+| mname    | varchar(10)                       | YES  |     | NULL    |                |
+| lname    | varchar(20)                       | NO   |     | NULL    |                |
+| mem_DOJ  | date                              | YES  |     | NULL    |                |
+| email    | varchar(30)                       | YES  | UNI | NULL    |                |
+| phone    | char(10)                          | YES  |     | NULL    |                |
+| mem_type | enum('regular','silver','golden') | YES  |     | NULL    |                |
++----------+-----------------------------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+mysql> describe booktran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TrnID    | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TrnDate  | datetime | YES  |     | NULL    |                |
+| BookID   | int(11)  | YES  |     | NULL    |                |
+| memberID | int(11)  | YES  |     | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from member;
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+| memberID | fname   | mname | lname  | mem_DOJ    | email             | phone      | mem_type |
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+|        1 | Pranali | NULL  | Pawar  | 2019-08-27 | Pranali@gmail.com | 9769188952 | regular  |
+|        2 | Pranali | abc   | Pawar  | 2019-08-27 | NULL              | 9769188982 | regular  |
+|        3 | Pranali | abc   | Pawar  | 2019-08-27 | NULL              | 9769188982 | regular  |
+|        4 | shreya  | NULL  | Dsouza | 2019-08-28 | NULL              | 9769187982 | silver   |
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into book(bookname,price) values('2 states',32);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into book(bookname,price) values('life',365);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from book;
++--------+----------+--------+
+| BookID | BookName | Price  |
++--------+----------+--------+
+|      1 | 2 states |  32.00 |
+|      2 | life     | 365.00 |
++--------+----------+--------+
+2 rows in set (0.00 sec)
+
+
+
+mysql> create table booktran1
+    ->     -> (
+    ->     -> TrnID int Auto_increment primary key,
+    ->     -> TrnDate datetime,
+    ->     -> BookID int,
+    ->     -> constraint Book_tran_bookID_fk foreign key Book(BookID) References Book(BookID),
+    ->     -> constraint member_memberID_fk foreign key member(MemberID) References member(memberID));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> (
+    -> TrnID int Auto_increment primary key,
+    -> TrnDate datetime,
+    -' at line 2
+mysql> create table booktran1
+    ->      (
+    ->      TrnID int Auto_increment primary key,
+    ->      TrnDate datetime,
+    ->      BookID int,
+    ->     memberID int,
+    ->      constraint Book_tran_bookID_fk foreign key Book(BookID) References Book(BookID),
+    ->      constraint member_memberID_fk foreign key member(MemberID) References member(memberID));
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into booktran1(TrnDate,BookID,memberID) values(now(),1,1);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into booktran1(TrnDate,BookID,memberID) values(now(),2,2);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from booktran1;
++-------+---------------------+--------+----------+
+| TrnID | TrnDate             | BookID | memberID |
++-------+---------------------+--------+----------+
+|     1 | 2019-08-27 19:01:07 |      1 |        1 |
+|     2 | 2019-08-27 19:01:19 |      2 |        2 |
++-------+---------------------+--------+----------+
+2 rows in set (0.00 sec)
+
+
+mysql> select BookID,memberID from booktran1 where BookID <> 2;
++--------+----------+
+| BookID | memberID |
++--------+----------+
+|      1 |        1 |
++--------+----------+
+1 row in set (0.01 sec)
+
+mysql> select * from member;
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+| memberID | fname   | mname | lname  | mem_DOJ    | email             | phone      | mem_type |
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+|        1 | Pranali | NULL  | Pawar  | 2019-08-27 | Pranali@gmail.com | 9769188952 | regular  |
+|        2 | Pranali | abc   | Pawar  | 2019-08-27 | NULL              | 9769188982 | regular  |
+|        3 | Pranali | abc   | Pawar  | 2019-08-27 | NULL              | 9769188982 | regular  |
+|        4 | shreya  | NULL  | Dsouza | 2019-08-28 | NULL              | 9769187982 | silver   |
++----------+---------+-------+--------+------------+-------------------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select memberID,mname from member where fname like '%p';
+Empty set (0.01 sec)
+
+mysql> select memberID,mname from member where fname like 'p%';
++----------+-------+
+| memberID | mname |
++----------+-------+
+|        1 | NULL  |
+|        2 | abc   |
+|        3 | abc   |
++----------+-------+
+3 rows in set (0.00 sec)
+
+
+mysql> select fname from member where lname like 'p____';
++---------+
+| fname   |
++---------+
+| Pranali |
+| Pranali |
+| Pranali |
++---------+
+3 rows in set (0.00 sec)
+
+mysql> select lname from member where lname like 'p____';
++-------+
+| lname |
++-------+
+| Pawar |
+| Pawar |
+| Pawar |
++-------+
+3 rows in set (0.00 sec)
+
+mysql> select memberID,mname from member where fname like '%p%';
++----------+-------+
+| memberID | mname |
++----------+-------+
+|        1 | NULL  |
+|        2 | abc   |
+|        3 | abc   |
++----------+-------+
+3 rows in set (0.00 sec)
+
+
+mysql> select memberID,mname from member where fname like '_%n%_';
++----------+-------+
+| memberID | mname |
++----------+-------+
+|        1 | NULL  |
+|        2 | abc   |
+|        3 | abc   |
++----------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select memberID,mname from member where fname like '_%e%_';
++----------+-------+
+| memberID | mname |
++----------+-------+
+|        4 | NULL  |
++----------+-------+
+1 row in set (0.00 sec)
+
+mysql> select memberID,mname from member where fname like '_%s%_';
+Empty set (0.00 sec)
+
+mysql>
+
+
+
+
+
+
+
+
+
+
+
