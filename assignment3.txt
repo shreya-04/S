@@ -1,0 +1,789 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| emp                |
+| emp1               |
+| ganesh             |
+| mydb               |
+| mysql              |
+| newday             |
+| performance_schema |
+| pranali            |
+| shrepranali3947    |
+| test               |
++--------------------+
+11 rows in set (0.02 sec)
+
+mysql> create database shreya039;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create TABLE SALESPEOPLE(snum int primary key,sname varchar(25),city varchar(30),comm decimal(2,2));
+ERROR 1046 (3D000): No database selected
+mysql> use shreya039;
+Database changed
+mysql> create TABLE SALESPEOPLE(snum int primary key,sname varchar(25),city varchar(30),comm decimal(2,2));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> describe salespeople;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| snum  | int(11)      | NO   | PRI | NULL    |       |
+| sname | varchar(25)  | YES  |     | NULL    |       |
+| city  | varchar(30)  | YES  |     | NULL    |       |
+| comm  | decimal(2,2) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> create table customers(cnum int primary key,cname varchar,city varchar,rating int,snum int
+    -> ,constraint customers_snum_fk foreign key(snum) references salespeople(snum));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'city varchar,rating int,snum int
+,constraint customers_snum_fk foreign key(snum)' at line 1
+mysql> create table customers(cnum int primary key,cname varchar(20),city varchar(20),rating int,snum int
+    -> ,constraint customers_snum_fk foreign key(snum) references salespeople(snum));
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> describe customers;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| cnum   | int(11)     | NO   | PRI | NULL    |       |
+| cname  | varchar(20) | YES  |     | NULL    |       |
+| city   | varchar(20) | YES  |     | NULL    |       |
+| rating | int(11)     | YES  |     | NULL    |       |
+| snum   | int(11)     | YES  | MUL | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> create table orders(onum int primary key,amt decimal(6,2),odate date,cnum int,snum int,
+    -> constraint orders_cnum_fk foreign key(cnum) references customers(cnum),
+    -> constraint orders_snum_fk foreign key(snum) references salespeople(snum));
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> describe orders;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| onum  | int(11)      | NO   | PRI | NULL    |       |
+| amt   | decimal(6,2) | YES  |     | NULL    |       |
+| odate | date         | YES  |     | NULL    |       |
+| cnum  | int(11)      | YES  | MUL | NULL    |       |
+| snum  | int(11)      | YES  | MUL | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> insert into salespeoplinsert into salespeople values(1001,'peel','London',.12),
+    -> (1002,'Serres','San Jose',.13),
+    -> (1004,'Motika','london',.11),
+    -> (1007,'Rifkin','Barcelona',.15),
+    -> (1003,'AxelRod','New York',.10),
+    -> (1005,'Fran','london',.26);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'into salespeople values(1001,'peel','London',.12),
+(1002,'Serres','San Jose',.13' at line 1
+mysql> insert into salespeople values(1001,'peel','London',.12),
+    -> (1002,'Serres','San Jose',.13),
+    -> (1004,'Motika','london',.11),
+    -> (1007,'Rifkin','Barcelona',.15),
+    -> (1003,'AxelRod','New York',.10),
+    -> (1005,'Fran','london',.26);
+Query OK, 6 rows affected (0.03 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from salespeople;
++------+---------+-----------+------+
+| snum | sname   | city      | comm |
++------+---------+-----------+------+
+| 1001 | peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.13 |
+| 1003 | AxelRod | New York  | 0.10 |
+| 1004 | Motika  | london    | 0.11 |
+| 1005 | Fran    | london    | 0.26 |
+| 1007 | Rifkin  | Barcelona | 0.15 |
++------+---------+-----------+------+
+6 rows in set (0.00 sec)
+
+mysql> insert into Customers values(2001,'Hoffman','London',100,1001),
+    -> (2002,'Giovanni','Rome',200,1003),
+    -> (2003,'liu','San jose',200,1002),
+    -> (2004,'Grass','Berlin',300,1002),
+    -> (2006,'Cisneros','london',100,1001),
+    -> (2008,'Cisneros','San Jose',300,1007),
+    -> (2007,'Pereira','Rome',100,1004);
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from customers;
++------+----------+----------+--------+------+
+| cnum | cname    | city     | rating | snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | liu      | San jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Cisneros | london   |    100 | 1001 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
++------+----------+----------+--------+------+
+7 rows in set (0.00 sec)
+
+mysql> insert into Customers values(3001,18.69,'1996/03/10',2008,1007),
+    -> (3003,767.19,'1996/03/10',2001,1001),
+    -> (3002,1900.10,'1996/03/10',2007,1004),
+    -> (3005,5160.45,'1996/03/10',2003,1002),
+    -> (3006,1098.46,'1996/03/10',2008,1007),
+    -> (3009,1713.23,'1996/04/10',2002,1003),
+    -> (3007,75.75,'1996/04/10',2002,1003),
+    -> (3008,4723.00,'1996/05/10',2006,1001),
+    -> (3010,1309.95,'1996/06/10',2004,1002),
+    -> (3011,9891.88,'1996/06/10',2006,1001);
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from Customers;
++------+----------+------------+--------+------+
+| cnum | cname    | city       | rating | snum |
++------+----------+------------+--------+------+
+| 2001 | Hoffman  | London     |    100 | 1001 |
+| 2002 | Giovanni | Rome       |    200 | 1003 |
+| 2003 | liu      | San jose   |    200 | 1002 |
+| 2004 | Grass    | Berlin     |    300 | 1002 |
+| 2006 | Cisneros | london     |    100 | 1001 |
+| 2007 | Pereira  | Rome       |    100 | 1004 |
+| 2008 | Cisneros | San Jose   |    300 | 1007 |
+| 3001 | 18.69    | 1996/03/10 |   2008 | 1007 |
+| 3002 | 1900.10  | 1996/03/10 |   2007 | 1004 |
+| 3003 | 767.19   | 1996/03/10 |   2001 | 1001 |
+| 3005 | 5160.45  | 1996/03/10 |   2003 | 1002 |
+| 3006 | 1098.46  | 1996/03/10 |   2008 | 1007 |
+| 3007 | 75.75    | 1996/04/10 |   2002 | 1003 |
+| 3008 | 4723.00  | 1996/05/10 |   2006 | 1001 |
+| 3009 | 1713.23  | 1996/04/10 |   2002 | 1003 |
+| 3010 | 1309.95  | 1996/06/10 |   2004 | 1002 |
+| 3011 | 9891.88  | 1996/06/10 |   2006 | 1001 |
++------+----------+------------+--------+------+
+17 rows in set (0.00 sec)
+
+mysql> delete from customers where cnum between 3001 and 3011;
+Query OK, 10 rows affected (0.16 sec)
+
+mysql> select * from Customers;
++------+----------+----------+--------+------+
+| cnum | cname    | city     | rating | snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | liu      | San jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Cisneros | london   |    100 | 1001 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
++------+----------+----------+--------+------+
+7 rows in set (0.00 sec)
+
+mysql> insert into orders values(3001,18.69,'1996/03/10',2008,1007),
+    -> (3003,767.19,'1996/03/10',2001,1001),
+    -> (3002,1900.10,'1996/03/10',2007,1004),
+    -> (3005,5160.45,'1996/03/10',2003,1002),
+    -> (3006,1098.46,'1996/03/10',2008,1007),
+    -> (3009,1713.23,'1996/04/10',2002,1003),
+    -> (3007,75.75,'1996/04/10',2002,1003),
+    -> (3008,4723.00,'1996/05/10',2006,1001),
+    -> (3010,1309.95,'1996/06/10',2004,1002),
+    -> (3011,9891.88,'1996/06/10',2006,1001);
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from orders;
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1996-03-10 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-03-10 | 2007 | 1004 |
+| 3003 |  767.19 | 1996-03-10 | 2001 | 1001 |
+| 3005 | 5160.45 | 1996-03-10 | 2003 | 1002 |
+| 3006 | 1098.46 | 1996-03-10 | 2008 | 1007 |
+| 3007 |   75.75 | 1996-04-10 | 2002 | 1003 |
+| 3008 | 4723.00 | 1996-05-10 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-04-10 | 2002 | 1003 |
+| 3010 | 1309.95 | 1996-06-10 | 2004 | 1002 |
+| 3011 | 9891.88 | 1996-06-10 | 2006 | 1001 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> describe salespeople;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| snum  | int(11)      | NO   | PRI | NULL    |       |
+| sname | varchar(25)  | YES  |     | NULL    |       |
+| city  | varchar(30)  | YES  |     | NULL    |       |
+| comm  | decimal(2,2) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select * from salespeople;
++------+---------+-----------+------+
+| snum | sname   | city      | comm |
++------+---------+-----------+------+
+| 1001 | peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.13 |
+| 1003 | AxelRod | New York  | 0.10 |
+| 1004 | Motika  | london    | 0.11 |
+| 1005 | Fran    | london    | 0.26 |
+| 1007 | Rifkin  | Barcelona | 0.15 |
++------+---------+-----------+------+
+6 rows in set (0.00 sec)
+
+mysql> select * from customers where rating=100;
++------+----------+--------+--------+------+
+| cnum | cname    | city   | rating | snum |
++------+----------+--------+--------+------+
+| 2001 | Hoffman  | London |    100 | 1001 |
+| 2006 | Cisneros | london |    100 | 1001 |
+| 2007 | Pereira  | Rome   |    100 | 1004 |
++------+----------+--------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> select * from customers where city is null;
+Empty set (0.00 sec)
+
+mysql> insert into customers values (2010,'nancy',null,200,1010);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`shreya039`.`customers`, CONSTRAINT `customers_snum_fk` FOREIGN KEY (`snum`) REFERENCES `salespeople` (`snum`))
+mysql> insert into customers values (2010,'nancy',null,200,1007);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into customers values (2010,'nancy',null,200,1007);
+ERROR 1062 (23000): Duplicate entry '2010' for key 'PRIMARY'
+mysql> select * from customers where city is null;
++------+-------+------+--------+------+
+| cnum | cname | city | rating | snum |
++------+-------+------+--------+------+
+| 2010 | nancy | NULL |    200 | 1007 |
++------+-------+------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from salesperson;
+ERROR 1146 (42S02): Table 'shreya039.salesperson' doesn't exist
+mysql> select * from salespeople;
++------+---------+-----------+------+
+| snum | sname   | city      | comm |
++------+---------+-----------+------+
+| 1001 | peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.13 |
+| 1003 | AxelRod | New York  | 0.10 |
+| 1004 | Motika  | london    | 0.11 |
+| 1005 | Fran    | london    | 0.26 |
+| 1007 | Rifkin  | Barcelona | 0.15 |
++------+---------+-----------+------+
+6 rows in set (0.00 sec)
+
+mysql> select * from orders oredr by cnum;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by cnum' at line 1
+mysql> select * from orders order by cnum;
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3003 |  767.19 | 1996-03-10 | 2001 | 1001 |
+| 3007 |   75.75 | 1996-04-10 | 2002 | 1003 |
+| 3009 | 1713.23 | 1996-04-10 | 2002 | 1003 |
+| 3005 | 5160.45 | 1996-03-10 | 2003 | 1002 |
+| 3010 | 1309.95 | 1996-06-10 | 2004 | 1002 |
+| 3008 | 4723.00 | 1996-05-10 | 2006 | 1001 |
+| 3011 | 9891.88 | 1996-06-10 | 2006 | 1001 |
+| 3002 | 1900.10 | 1996-03-10 | 2007 | 1004 |
+| 3006 | 1098.46 | 1996-03-10 | 2008 | 1007 |
+| 3001 |   18.69 | 1996-03-10 | 2008 | 1007 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> select * from orders order by cnum desc;
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1996-03-10 | 2008 | 1007 |
+| 3006 | 1098.46 | 1996-03-10 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-03-10 | 2007 | 1004 |
+| 3008 | 4723.00 | 1996-05-10 | 2006 | 1001 |
+| 3011 | 9891.88 | 1996-06-10 | 2006 | 1001 |
+| 3010 | 1309.95 | 1996-06-10 | 2004 | 1002 |
+| 3005 | 5160.45 | 1996-03-10 | 2003 | 1002 |
+| 3009 | 1713.23 | 1996-04-10 | 2002 | 1003 |
+| 3007 |   75.75 | 1996-04-10 | 2002 | 1003 |
+| 3003 |  767.19 | 1996-03-10 | 2001 | 1001 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> select cnum from orders order by cnum desc;
++------+
+| cnum |
++------+
+| 2008 |
+| 2008 |
+| 2007 |
+| 2006 |
+| 2006 |
+| 2004 |
+| 2003 |
+| 2002 |
+| 2002 |
+| 2001 |
++------+
+10 rows in set (0.00 sec)
+
+mysql> select sname  from salespeople sp inner join orders o on sp.snum=o.num;
+ERROR 1054 (42S22): Unknown column 'o.num' in 'on clause'
+mysql> select sname  from salespeople sp inner join orders o on sp.snum=o.snum;
++---------+
+| sname   |
++---------+
+| peel    |
+| peel    |
+| peel    |
+| Serres  |
+| Serres  |
+| AxelRod |
+| AxelRod |
+| Motika  |
+| Rifkin  |
+| Rifkin  |
++---------+
+10 rows in set (0.00 sec)
+
+mysql> select sname from salespeople sp inner join orders o on sp.snum=o.snum order by(s.snum);
+ERROR 1054 (42S22): Unknown column 's.snum' in 'order clause'
+mysql> select sname from salespeople sp inner join orders o on sp.snum=o.snum order by(sp.snum);
++---------+
+| sname   |
++---------+
+| peel    |
+| peel    |
+| peel    |
+| Serres  |
+| Serres  |
+| AxelRod |
+| AxelRod |
+| Motika  |
+| Rifkin  |
+| Rifkin  |
++---------+
+10 rows in set (0.00 sec)
+
+mysql> select sname from salespeople sp inner join orders o on sp.snum=o.snum order by(sp.sname);
++---------+
+| sname   |
++---------+
+| AxelRod |
+| AxelRod |
+| Motika  |
+| peel    |
+| peel    |
+| peel    |
+| Rifkin  |
+| Rifkin  |
+| Serres  |
+| Serres  |
++---------+
+10 rows in set (0.00 sec)
+
+mysql> select sname from salespeople sp inner join orders o on sp.snum=o.snum group by(sp.sname);
++---------+
+| sname   |
++---------+
+| AxelRod |
+| Motika  |
+| peel    |
+| Rifkin  |
+| Serres  |
++---------+
+5 rows in set (0.00 sec)
+
+mysql> select sname from salespeople sp inner join orders o on sp.snum=o.snum group by(sp.snum);
++---------+
+| sname   |
++---------+
+| peel    |
+| Serres  |
+| AxelRod |
+| Motika  |
+| Rifkin  |
++---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from salespeople sp inner join orders o on sp.snum=o.snum group by(sp.snum);
++------+---------+-----------+------+------+---------+------------+------+------+
+| snum | sname   | city      | comm | onum | amt     | odate      | cnum | snum |
++------+---------+-----------+------+------+---------+------------+------+------+
+| 1001 | peel    | London    | 0.12 | 3003 |  767.19 | 1996-03-10 | 2001 | 1001 |
+| 1002 | Serres  | San Jose  | 0.13 | 3005 | 5160.45 | 1996-03-10 | 2003 | 1002 |
+| 1003 | AxelRod | New York  | 0.10 | 3007 |   75.75 | 1996-04-10 | 2002 | 1003 |
+| 1004 | Motika  | london    | 0.11 | 3002 | 1900.10 | 1996-03-10 | 2007 | 1004 |
+| 1007 | Rifkin  | Barcelona | 0.15 | 3001 |   18.69 | 1996-03-10 | 2008 | 1007 |
++------+---------+-----------+------+------+---------+------------+------+------+
+5 rows in set (0.00 sec)
+
+mysql> select sname from salespeople sp inner join orders o on sp.snum=o.snum group by(sp.sname);
++---------+
+| sname   |
++---------+
+| AxelRod |
+| Motika  |
+| peel    |
+| Rifkin  |
+| Serres  |
++---------+
+5 rows in set (0.00 sec)
+
+mysql> select cname from customers c inner join salespeople s on c.cnum=s.cnum group by(s.cname);
+ERROR 1054 (42S22): Unknown column 's.cnum' in 'on clause'
+mysql> select cname from customers c inner join salespeople s on c.cnum=s.cnum group by(c.cname);
+ERROR 1054 (42S22): Unknown column 's.cnum' in 'on clause'
+mysql> select cname from customers c inner join salespeople s on c.snum=s.snum group by(c.cname);
++----------+
+| cname    |
++----------+
+| Cisneros |
+| Giovanni |
+| Grass    |
+| Hoffman  |
+| liu      |
+| nancy    |
+| Pereira  |
++----------+
+7 rows in set (0.00 sec)
+
+mysql> select cname from customers c inner join orders o on s.snum=c.cnum group by(cname);
+ERROR 1054 (42S22): Unknown column 's.snum' in 'on clause'
+mysql> select cname from customers c inner join orders o on o.snum=c.cnum group by(cname);
+Empty set (0.00 sec)
+
+mysql> select cname from customers c inner join orders o on o.cnum=c.cnum group by(cname);
++----------+
+| cname    |
++----------+
+| Cisneros |
+| Giovanni |
+| Grass    |
+| Hoffman  |
+| liu      |
+| Pereira  |
++----------+
+6 rows in set (0.00 sec)
+
+mysql> select c.cname from customers c inner join orders o on o.cnum=c.cnum group by(o.cnum);
++----------+
+| cname    |
++----------+
+| Hoffman  |
+| Giovanni |
+| liu      |
+| Grass    |
+| Cisneros |
+| Pereira  |
+| Cisneros |
++----------+
+7 rows in set (0.00 sec)
+
+mysql> select count(snum),snum from orders group by snum;
++-------------+------+
+| count(snum) | snum |
++-------------+------+
+|           3 | 1001 |
+|           2 | 1002 |
+|           2 | 1003 |
+|           1 | 1004 |
+|           2 | 1007 |
++-------------+------+
+5 rows in set (0.14 sec)
+
+mysql> select count(snum),snum from orders group by snum order by snum desc;
++-------------+------+
+| count(snum) | snum |
++-------------+------+
+|           2 | 1007 |
+|           1 | 1004 |
+|           2 | 1003 |
+|           2 | 1002 |
+|           3 | 1001 |
++-------------+------+
+5 rows in set (0.00 sec)
+
+mysql> select count(snum),snum from orders group by snum order by count(snum) desc;
++-------------+------+
+| count(snum) | snum |
++-------------+------+
+|           3 | 1001 |
+|           2 | 1002 |
+|           2 | 1003 |
+|           2 | 1007 |
+|           1 | 1004 |
++-------------+------+
+5 rows in set (0.00 sec)
+
+mysql> select count(snum),snum from orders group by snum order by count(onum) desc;
++-------------+------+
+| count(snum) | snum |
++-------------+------+
+|           3 | 1001 |
+|           2 | 1002 |
+|           2 | 1003 |
+|           2 | 1007 |
+|           1 | 1004 |
++-------------+------+
+5 rows in set (0.00 sec)
+
+mysql> select count(onum),onum from orders group by onum order by count(onum) desc;
++-------------+------+
+| count(onum) | onum |
++-------------+------+
+|           1 | 3011 |
+|           1 | 3001 |
+|           1 | 3002 |
+|           1 | 3003 |
+|           1 | 3005 |
+|           1 | 3006 |
+|           1 | 3007 |
+|           1 | 3008 |
+|           1 | 3009 |
+|           1 | 3010 |
++-------------+------+
+10 rows in set (0.02 sec)
+
+mysql> select * from customers where city='san jose';
++------+----------+----------+--------+------+
+| cnum | cname    | city     | rating | snum |
++------+----------+----------+--------+------+
+| 2003 | liu      | San jose |    200 | 1002 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
++------+----------+----------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from salespeople s inner join customers c on o.snum=o.cnum group by city;
+ERROR 1054 (42S22): Unknown column 'o.snum' in 'on clause'
+mysql> select * from salespeople s inner join customers c on o.snum=c.cnum group by city;
+ERROR 1054 (42S22): Unknown column 'o.snum' in 'on clause'
+mysql> select * from salespeople s inner join customers c on c.snum=s.snum where c.city=s.city;
++------+--------+----------+------+------+----------+----------+--------+------+
+| snum | sname  | city     | comm | cnum | cname    | city     | rating | snum |
++------+--------+----------+------+------+----------+----------+--------+------+
+| 1001 | peel   | London   | 0.12 | 2001 | Hoffman  | London   |    100 | 1001 |
+| 1001 | peel   | London   | 0.12 | 2006 | Cisneros | london   |    100 | 1001 |
+| 1002 | Serres | San Jose | 0.13 | 2003 | liu      | San jose |    200 | 1002 |
++------+--------+----------+------+------+----------+----------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> select s.snum,s.sname from salespeople s inner join customer c on s.snum=c.snum
+    -> group by c.snum order by count(c.snum);
+ERROR 1146 (42S02): Table 'shreya039.customer' doesn't exist
+mysql> select s.snum,s.sname from salespeople s inner join customers c on s.snum=c.snum
+    -> group by c.snum order by count(c.snum);
++------+---------+
+| snum | sname   |
++------+---------+
+| 1003 | AxelRod |
+| 1004 | Motika  |
+| 1001 | peel    |
+| 1002 | Serres  |
+| 1007 | Rifkin  |
++------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select s.snum,s.sname from salespeople s inner join customers c on s.snum=c.snum
+    -> group by c.snum having count(c.snum)>1;
++------+--------+
+| snum | sname  |
++------+--------+
+| 1001 | peel   |
+| 1002 | Serres |
+| 1007 | Rifkin |
++------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select o.onum from orders o inner join salespeople s on s.snum=o.snum group by o.snum having max(o.amt);
++------+
+| onum |
++------+
+| 3003 |
+| 3005 |
+| 3007 |
+| 3002 |
+| 3001 |
++------+
+5 rows in set (0.00 sec)
+
+mysql> select o.onum,o.snum from orders o inner join salespeople s on s.snum=o.snum group by o.snum having max(o.amt);
++------+------+
+| onum | snum |
++------+------+
+| 3003 | 1001 |
+| 3005 | 1002 |
+| 3007 | 1003 |
+| 3002 | 1004 |
+| 3001 | 1007 |
++------+------+
+5 rows in set (0.00 sec)
+
+mysql> select o.onum,o.snum,o.amt from orders o inner join salespeople s on s.snum=o.snum group by o.snum having max(o.amt);
++------+------+---------+
+| onum | snum | amt     |
++------+------+---------+
+| 3003 | 1001 |  767.19 |
+| 3005 | 1002 | 5160.45 |
+| 3007 | 1003 |   75.75 |
+| 3002 | 1004 | 1900.10 |
+| 3001 | 1007 |   18.69 |
++------+------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select o.onum,o.snum,o.amt from orders o inner join salespeople s on s.snum=o.snum group by o.snum where max(o.amt);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where max(o.amt)' at line 1
+mysql> select o.onum,o.snum,o.amt from orders o inner join salespeople s on s.snum=o.snum group by o.snum having max(o.amt);
++------+------+---------+
+| onum | snum | amt     |
++------+------+---------+
+| 3003 | 1001 |  767.19 |
+| 3005 | 1002 | 5160.45 |
+| 3007 | 1003 |   75.75 |
+| 3002 | 1004 | 1900.10 |
+| 3001 | 1007 |   18.69 |
++------+------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from salespeople where city in('barcelona','london);'
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select * from salespeople where city in('barcelona','london);
+    '> ;
+    '> ;
+    '> ^Z
+    '> /;
+    '> /
+    '> '
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select * from salespeople where city in('barcelona','london');
++------+--------+-----------+------+
+| snum | sname  | city      | comm |
++------+--------+-----------+------+
+| 1001 | peel   | London    | 0.12 |
+| 1004 | Motika | london    | 0.11 |
+| 1005 | Fran   | london    | 0.26 |
+| 1007 | Rifkin | Barcelona | 0.15 |
++------+--------+-----------+------+
+4 rows in set (0.00 sec)
+
+mysql> select o.onum from orders o inner join salespeople s on o.snum=s.snum where s.sname="Motika";
++------+
+| onum |
++------+
+| 3002 |
++------+
+1 row in set (0.00 sec)
+
+mysql> describe orders
+    -> ;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| onum  | int(11)      | NO   | PRI | NULL    |       |
+| amt   | decimal(6,2) | YES  |     | NULL    |       |
+| odate | date         | YES  |     | NULL    |       |
+| cnum  | int(11)      | YES  | MUL | NULL    |       |
+| snum  | int(11)      | YES  | MUL | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> select * from orders;
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1996-03-10 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-03-10 | 2007 | 1004 |
+| 3003 |  767.19 | 1996-03-10 | 2001 | 1001 |
+| 3005 | 5160.45 | 1996-03-10 | 2003 | 1002 |
+| 3006 | 1098.46 | 1996-03-10 | 2008 | 1007 |
+| 3007 |   75.75 | 1996-04-10 | 2002 | 1003 |
+| 3008 | 4723.00 | 1996-05-10 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-04-10 | 2002 | 1003 |
+| 3010 | 1309.95 | 1996-06-10 | 2004 | 1002 |
+| 3011 | 9891.88 | 1996-06-10 | 2006 | 1001 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> truncate orders;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into orders values(3001,18.69,'1996/03/10',2008,1007),
+    ->     -> (3003,767.19,'1996/10/03',2001,1001),
+    ->     -> (3002,1900.10,'1996/10/03',2007,1004),
+    ->     -> (3005,5160.45,'1996/10/03',2003,1002),
+    ->     -> (3006,1098.46,'1996/10/03',2008,1007),
+    ->     -> (3009,1713.23,'1996/10/04',2002,1003),
+    ->     -> (3007,75.75,'1996/10/04',2002,1003),
+    ->     -> (3008,4723.00,'1996/10/05',2006,1001),
+    ->     -> (3010,1309.95,'1996/10/06',2004,1002),
+    ->     -> (3011,9891.88,'1996/10/06',2006,1001);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> (3003,767.19,'1996/10/03',2001,1001),
+    -> (3002,1900.10,'1996/10/03',2007,' at line 2
+mysql>  insert into orders values(3001,18.69,'1996/03/10',2008,1007),
+    ->      (3003,767.19,'1996/10/03',2001,1001),
+    ->      (3002,1900.10,'1996/10/03',2007,1004),
+    ->      (3005,5160.45,'1996/10/03',2003,1002),
+    ->      (3006,1098.46,'1996/10/03',2008,1007),
+    ->      (3009,1713.23,'1996/10/04',2002,1003),
+    ->      (3007,75.75,'1996/10/04',2002,1003),
+    ->      (3008,4723.00,'1996/10/05',2006,1001),
+    ->      (3010,1309.95,'1996/10/06',2004,1002),
+    ->      (3011,9891.88,'1996/10/06',2006,1001);
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from orders;
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1996-03-10 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-10-03 | 2007 | 1004 |
+| 3003 |  767.19 | 1996-10-03 | 2001 | 1001 |
+| 3005 | 5160.45 | 1996-10-03 | 2003 | 1002 |
+| 3006 | 1098.46 | 1996-10-03 | 2008 | 1007 |
+| 3007 |   75.75 | 1996-10-04 | 2002 | 1003 |
+| 3008 | 4723.00 | 1996-10-05 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-10-04 | 2002 | 1003 |
+| 3010 | 1309.95 | 1996-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1996-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> select cnum from orders where odate='1996/10/03';
++------+
+| cnum |
++------+
+| 2007 |
+| 2001 |
+| 2003 |
+| 2008 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> select * from salespeople where sname like 'P__l';
++------+-------+--------+------+
+| snum | sname | city   | comm |
++------+-------+--------+------+
+| 1001 | peel  | London | 0.12 |
++------+-------+--------+------+
+1 row in set (0.00 sec)
